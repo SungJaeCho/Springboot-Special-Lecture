@@ -18,7 +18,8 @@ import com.cos.person.domain.UserRepository;
 @RestController
 public class UserController {
 	
-	private UserRepository userRepository; //요즘은 final을 써서 위에 @RequiredArgsConstructor 어노테이션으로 주입함 final은 변하지 않는다는 의미 + 컴파일시 생성이라는 의미도있음 
+	//요즘은 final을 써서 위에 @RequiredArgsConstructor 어노테이션으로 주입함 final은 변하지 않는다는 의미 + 컴파일시 생성이라는 의미도있음
+	private UserRepository userRepository;  
 	// DI 의존성 주입
 	public UserController(UserRepository userRepository) {
 		this.userRepository = userRepository;
