@@ -25,8 +25,16 @@ public class UserRepository {
 		return user;
 	}
 	
-	public void save(User user) {
+	public void save(JoinReqDto dto) {
 		System.out.println("DB인터트");
 	}
+	
+	public void delete(int id) {
+		System.out.println("DB삭제완료");
+	}
 
+	public void update(int id, UpdateReqDto dto) {
+		throw new IllegalArgumentException("아규먼트를 잘못넣음");
+//		System.out.println("DB에 업데이트");
+	}
 }

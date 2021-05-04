@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cos.person.domain.CommonDto;
+import com.cos.person.domain.JoinReqDto;
+import com.cos.person.domain.UpdateReqDto;
 import com.cos.person.domain.User;
 import com.cos.person.domain.UserRepository;
 
@@ -27,45 +31,51 @@ public class UserController {
 	
 	// http://localhost:8080/user
 	@GetMapping("/user")
-	public List<User> findAll() {
+	public CommonDto<List<User>> findAll() {
 		System.out.println("findAll()");
-		return userRepository.findAll(); //MessageConverter (JavaObject -> JSON String)
+		return new CommonDto<>(HttpStatus.OK.value(), userRepository.findAll()); //MessageConverter (JavaObject -> JSON String)
 	}
 	
 	// http://localhost:8080/user/1
 	@GetMapping("/user/{id}")
-	public User findById(@PathVariable int id) {
+	public CommonDto<User> findById(@PathVariable int id) {
 		System.out.println("findById() : id : " + id);
-		return userRepository.findById(id);
+		return new CommonDto<>(HttpStatus.OK.value(), userRepository.findById(id));
 	}
 	
+	@CrossOrigin //CORS정책 푸는 것 (외부 자바스크립트에서 호출가능하게)
 	// http://localhost:8080/user
 	// x-www.form-urlencoded => request.getParameter()
 	// text/plain => @RequestBody 어노테이션
 	// application/json => @ResponseBody 어노테이션 + 오브젝트로 받기
 	@PostMapping("/user")
-	public ResponseEntity<String> save(@RequestBody User user) {
+	public CommonDto<String> save(@RequestBody JoinReqDto dto) {
 		System.out.println("save()");
-		System.out.println("user : " + user);
+		System.out.println("user : " + dto);
 //		System.out.println("data : " +data);
 //		System.out.println("username : " +username);
 //		System.out.println("password : " +password);
 //		System.out.println("phone : " +phone);
-		userRepository.save(user);
-		return new ResponseEntity<>("OK", HttpStatus.OK);
+		userRepository.save(dto);
+		return new CommonDto<>(HttpStatus.CREATED.value(),"OK");
 	}
 	
 	// http://localhost:8080/user/1
 	@DeleteMapping("/user/{id}")
-	public void delete(@PathVariable int id) {
+	public CommonDto delete(@PathVariable int id) {
 		System.out.println("delete");
+		userRepository.delete(id);
+		return new CommonDto<>(HttpStatus.OK.value());
 		
 	}
 	
 	// http://localhost:8080/user/1
 	@PutMapping("/user/{id}")
-	public void update(@PathVariable int id, String password, String phone) {
+	public CommonDto update(@PathVariable int id, @RequestBody UpdateReqDto dto) {
 		System.out.println("update");
+		System.out.println("updateReqDto : " + dto);
+		userRepository.update(id, dto);
+		return new CommonDto<>(HttpStatus.OK.value());
 		
 	}
 
