@@ -1,9 +1,14 @@
 package com.cos.person.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,8 +53,20 @@ public class UserController {
 	// x-www.form-urlencoded => request.getParameter()
 	// text/plain => @RequestBody 어노테이션
 	// application/json => @ResponseBody 어노테이션 + 오브젝트로 받기
+	// <?>는 리턴시 어떤값을 리턴할때 정하겠다는 의미임
+	// @Valid사용시 @RequestBody앞에 붙여야함
 	@PostMapping("/user")
-	public CommonDto<String> save(@RequestBody JoinReqDto dto) {
+	public CommonDto<?> save(@Valid @RequestBody JoinReqDto dto, BindingResult bindingResult) {
+		
+		// bindingResult에 에러가 존재할시
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errorMap = new HashMap<>();
+			for(FieldError error : bindingResult.getFieldErrors()) {
+				errorMap.put(error.getField(), error.getDefaultMessage());
+			}
+			return new CommonDto<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+		}
+		
 		System.out.println("save()");
 		System.out.println("user : " + dto);
 //		System.out.println("data : " +data);
