@@ -17,3 +17,14 @@
  - A라는 함수의 실행전 Pointcut을 설정했을 경우 A함수를 프록시공간 메모리를 띄워서 가져온 후 전/후로 나뉘어 실행함
  - 앞단만 처리하고 싶다면 필터만 사용해도 되나 전/후를 모두 처리하고 싶으면 AOP를 사용한다. (필터+리플렉션이 AOP라고 볼수있음)
  
+
+Aspect : 공통기능</br>
+Advice : Aspect의 기능 (Aspect랑 의미가 비슷함)</br>
+Joinpoint : Advice를 적용해야 하는 부분(Ex: 필드, 메소드 / 스프링에서는 메소드만)</br>
+Pointcut : Joinpoint의 부분으로 실제로 Advice가 적용된 부분</br>
+Weaving : Advice를 핵심기능에 적용하는 행위</br>
+
+** @Configuration과 @Component 사용시 차이 **</br>
+- 컨트롤러 진입전 설정이 필요할경우 @Configuration , 그 이후는 Component</br>
+
+ 
