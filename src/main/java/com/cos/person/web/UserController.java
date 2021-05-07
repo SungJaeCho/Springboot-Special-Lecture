@@ -59,13 +59,13 @@ public class UserController {
 	public CommonDto<?> save(@Valid @RequestBody JoinReqDto dto, BindingResult bindingResult) {
 		
 		// bindingResult에 에러가 존재할시
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errorMap = new HashMap<>();
-			for(FieldError error : bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField(), error.getDefaultMessage());
-			}
-			return new CommonDto<>(HttpStatus.BAD_REQUEST.value(), errorMap);
-		}
+//		if(bindingResult.hasErrors()) {
+//			Map<String, String> errorMap = new HashMap<>();
+//			for(FieldError error : bindingResult.getFieldErrors()) {
+//				errorMap.put(error.getField(), error.getDefaultMessage());
+//			}
+//			return new CommonDto<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+//		}
 		
 		System.out.println("save()");
 		System.out.println("user : " + dto);
@@ -91,13 +91,13 @@ public class UserController {
 	public CommonDto update(@PathVariable int id,@Valid @RequestBody UpdateReqDto dto, BindingResult bindingResult) {
 		
 		// bindingResult에 에러가 존재할시
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errorMap = new HashMap<>();
-			for(FieldError error : bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField(), error.getDefaultMessage());
-			}
-			return new CommonDto<>(HttpStatus.BAD_REQUEST.value(), errorMap);
-		}
+//		if(bindingResult.hasErrors()) {
+//			Map<String, String> errorMap = new HashMap<>();
+//			for(FieldError error : bindingResult.getFieldErrors()) {
+//				errorMap.put(error.getField(), error.getDefaultMessage());
+//			}
+//			return new CommonDto<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+//		}
 		
 		System.out.println("update");
 		System.out.println("updateReqDto : " + dto);
