@@ -3,15 +3,21 @@ package com.cos.person.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.cos.person.domain.CommonDto;
 
@@ -21,8 +27,14 @@ import com.cos.person.domain.CommonDto;
 @Aspect
 public class BindingAdvice {
 	
+	
+	private static final Logger log = LoggerFactory.getLogger(BindingAdvice.class);
+
+	
 	@Before("execution(* com.cos.person.web..*Controller.*(..))") // controller의 모든 함수의 앞/뒤에 실행됨
 	public void testCheck() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		System.out.println("@Before주소 :" + request.getRequestURI());
 		// request값 처리못하나요?
 		// log처리는? 파일처리
 		System.out.println("로그를 남겼습니다.");
@@ -52,10 +64,13 @@ public class BindingAdvice {
 				BindingResult bindingResult = (BindingResult) arg; // 다운캐스팅
 				
 				// bindingResult에 에러가 존재할시
+				// 서비스 : 정상적인 화면 -> 사용자요청
 				if(bindingResult.hasErrors()) {
 					Map<String, String> errorMap = new HashMap<>();
 					for(FieldError error : bindingResult.getFieldErrors()) {
 						errorMap.put(error.getField(), error.getDefaultMessage());
+						// 로그 레벨 error, warn, info, debug
+						log.warn(type +"." +method+"() => 필드 :"+error.getField()+",메시지:"+error.getDefaultMessage());
 					}
 					return new CommonDto<>(HttpStatus.BAD_REQUEST.value(), errorMap);
 				}
