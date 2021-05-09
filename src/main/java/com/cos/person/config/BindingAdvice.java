@@ -21,6 +21,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.cos.person.domain.CommonDto;
 
+import io.sentry.Sentry;
+
 // 메모리에 띄워야하는데 해당 advice의 경우 reflect가 controller를 실행 한 뒤 실행이 되어야하므로 @Configuration으로 하지 않고 @Component로해도 됨
 // 컨트롤러 진입전 설정이 필요할경우 @Configuration , 그 이후는 Component
 @Component  // Controller뜨고 난 뒤 메모리뜸
@@ -71,6 +73,7 @@ public class BindingAdvice {
 						errorMap.put(error.getField(), error.getDefaultMessage());
 						// 로그 레벨 error, warn, info, debug
 						log.warn(type +"." +method+"() => 필드 :"+error.getField()+",메시지:"+error.getDefaultMessage());
+						Sentry.captureMessage(type +"." +method+"() => 필드 :"+error.getField()+",메시지:"+error.getDefaultMessage());
 					}
 					return new CommonDto<>(HttpStatus.BAD_REQUEST.value(), errorMap);
 				}
